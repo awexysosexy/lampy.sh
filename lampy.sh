@@ -1,8 +1,9 @@
-sudo yum -y update ; yum -y ; yum clean all
+sudo yum -y update ; yum -y upgrade ; yum clean all
 sudo yum -y install httpd
 sudo yum -y install yum-utils
 sudo yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
 sudo yum -y module install mariadb
+sudo yum -y install wget dialog
 
 sudo systemctl enable --now mariadb
 sudo systemctl enable --now httpd
@@ -19,12 +20,12 @@ sudo firewall-cmd --permanent --zone=public --add-port 53/tcp
 
 sudo mysql_secure_installation
 
-UPDATE mysql.user SET Password=PASSWORD('Kode1234!') WHERE User='root';
-DELETE FROM mysql.user WHERE User='';
-DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0$
-DROP DATABASE IF EXISTS test;
-DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
-FLUSH PRIVILEGES;
+#UPDATE mysql.user SET Password=PASSWORD('Kode1234!') WHERE User='root';
+#DELETE FROM mysql.user WHERE User='';
+#DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0$
+#DROP DATABASE IF EXISTS test;
+#DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+#FLUSH PRIVILEGES;
 
 
 sudo systemctl restart httpd
@@ -81,28 +82,28 @@ DIR="/etc/httpd"
 DIRR="/var/lib/mysql"
 DIRRR="/usr/bin/php"
 
-if [ -d "$DIR"]; then
+if [ -d "$DIR" ] ; then
 	echo "$DIR exists"
 else
 	sudo yum -y install httpd
 	systemctl start httpd.service
 fi
 
-if [ -d "$DIRR" ] : then
+if [ -d "$DIRR" ] ; then
 	echo "$DIRR exists"
 else 
 	sudo yum -y install mariadb mariadb-server
 	systemctl start mariadb.service
 fi
 
-if [ -d "$DIRRR" ] : then
+if [ -d "$DIRRR" ] ; then
         echo "$DIRRR exists"
 else 
      	sudo yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fieinfo
 fi
 
 wget -P /var/www/html $wp_source
-tar -zxvf latest.tar.gz
+sudo tar -xpvf /var/www/html/latest.tar.gz
 
 
 sudo yum -y install rsync
@@ -126,7 +127,7 @@ SQL=${Q1}${Q2}${Q3}${Q4}${Q5}
 
 `mysql -u root -p -e "$SQL"`
 
-cp $server_root/wp-config-sample.php $server_root/wp-config.php
+cp $server_root/wwordpress/p-config-sample.php $server_root/wp-config.php
 
 sed -i "s/database_name_here/$database/g" $server_root/wp-config.php
 sed -i "s/username_here/$user/g" $server_root/wp-config.php
