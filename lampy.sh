@@ -104,11 +104,13 @@ fi
 wget -P /var/www/html $wp_source
 tar -zxvf latest.tar.gz
 
+
+sudo yum -y install rsync
 sudo rsync -avP wordpress/ $server_root 
 
 echo -e "finishing up"
 
-sudo chown apache:apache $server_root/* -R
+sudo chown apache:apache /var/www/html/* -R
 mv $server_root/index.html $server_root/index.html.orig
 
 #finalizing the installation, we still need to move or write user generated input to files and create mysql user.
