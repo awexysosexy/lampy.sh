@@ -44,7 +44,7 @@ sudo rpm --import jcameron-key.asc
 sudo yum install webmin -y
 
 #setting variables for later use
-server_root ="/var/www/html"
+server_root="/var/www/html"
 wp_source="https://wordpress.org/latest.tar.gz"
 user="wpuser"
 database="wpdatabase"
@@ -127,7 +127,7 @@ SQL=${Q1}${Q2}${Q3}${Q4}${Q5}
 
 `mysql -u root -p -e "$SQL"`
 
-cp $server_root/wwordpress/p-config-sample.php $server_root/wp-config.php
+cp ./wordpress/wp-config-sample.php /var/www/html/wp-config.php
 
 sed -i "s/database_name_here/$database/g" $server_root/wp-config.php
 sed -i "s/username_here/$user/g" $server_root/wp-config.php
