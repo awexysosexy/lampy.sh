@@ -1,3 +1,6 @@
+##if you stumble upon this script, do not expect it to work :D
+
+
 sudo yum -y update ; yum -y upgrade ; yum clean all
 sudo yum -y install httpd
 sudo yum -y install yum-utils
