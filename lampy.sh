@@ -1,14 +1,14 @@
 ##if you stumble upon this script, do not expect it to work since i have no clue what im doing :D
 
 sudo yum -y update ; yum -y upgrade ; yum clean all
-sudo yum -y install httpd
+sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 sudo yum -y install yum-utils
+sudo yum-config-manager --enable remi-php56
+sudo yum -y install httpd
 sudo yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo
 sudo yum -y module install mariadb
 sudo yum -y install wget dialog
-sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-sudo yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-sudo yum-config-manager --enable remi-php56
 sudo yum -y install epel-release ; yum -y update ; yum -y upgrade 
 sudo yum -y install fail2ban fail2ban-systemd postfix dovecot system-switch-mail system-switch-mail-gnome
 
@@ -57,34 +57,6 @@ sudo yum install webmin -y
 
 sudo yum -y remove sendmail*
 chkconfig --level 345 dovecot on
-
-#SETTING UP FAIL2BAN
-sudo systemctl enable fail2ban
-sudo systemctl start fail2ban
-
-cat > /etc/fail2ban/jail.local << EOF
-
-[DEFAULT]
-#Ban hosts for half an hour:
-bantime = 1800
-
-#override /etc/fail2ban/jail.d/00-firewall.conf
-banaction = iptables-multiport
-
-[sshd]
-enabled = true
-
-EOF
-
-#ignore following ips
-
-sed -i '/ignoreip = 127.0.0.1\/8/c\ignoreip = 192.168.123.143/24' /etc/fail2ban/jail.conf
-
-sudo systemctl restart fail2ban
-
-sudo systemctl fail2ban-client status'
-
-
 
 #setting variables for later use
 server_root="/var/www/html"
@@ -177,5 +149,32 @@ sed -i "s/username_here/$user/g" $server_root/wp-config.php
 sed -i "s/password_here/$pass/g" $server_root/wp-config.php
 sed -i "s/wp_/$table/g" $server_root/wp-config.php
 
+
 find / -type d -name "wordpress" -exec rm -rf {} \;
 find / -type f -name "latest.tar.gz" -exec rm -rf {} \;
+
+#SETTING UP FAIL2BAN
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
+
+cat > /etc/fail2ban/jail.local << EOF
+
+[DEFAULT]
+#Ban hosts for half an hour:
+bantime = 1800
+
+#override /etc/fail2ban/jail.d/00-firewall.conf
+banaction = iptables-multiport
+
+[sshd]
+enabled = true
+
+EOF
+
+#ignore following ips
+
+sed -i '/ignoreip = 127.0.0.1\/8/c\ignoreip = 192.168.123.143/24' /etc/fail2ban/jail.conf
+
+sudo systemctl restart fail2ban
+
+sudo systemctl fail2ban-client status
