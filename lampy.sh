@@ -12,9 +12,6 @@ sudo yum -y install wget dialog
 sudo yum -y install epel-release ; yum -y update ; yum -y upgrade 
 sudo yum -y install fail2ban fail2ban-systemd postfix dovecot system-switch-mail system-switch-mail-gnome
 
-jghggg
-
-
 sudo systemctl enable --now mariadb
 sudo systemctl enable --now httpd
 sudo systemctl start httpd.service
