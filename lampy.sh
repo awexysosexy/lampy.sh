@@ -117,7 +117,7 @@ else
      	sudo yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fieinfo
 fi
 
-wget -P $wp_source
+wget $wp_source
 sudo tar -xpvf latest.tar.gz
 
 
@@ -126,7 +126,7 @@ sudo rsync -avP wordpress/ $server_root
 
 echo -e "finishing up"
 
-sudo chown apache:apache /var/www/html/* -R
+sudo chown apache:apache $server_root/* -R
 mv $server_root/index.html $server_root/index.html.orig
 
 #finalizing the installation, we still need to move or write user generated input to files and create mysql user.
@@ -142,7 +142,7 @@ SQL=${Q1}${Q2}${Q3}${Q4}${Q5}
 
 `mysql -u root -p -e "$SQL"`
 
-cp ./wordpress/wp-config-sample.php /var/www/html/wp-config.php
+cp $server_root/wp-config-sample.php $server_root/wp-config.php
 
 sed -i "s/database_name_here/$database/g" $server_root/wp-config.php
 sed -i "s/username_here/$user/g" $server_root/wp-config.php
